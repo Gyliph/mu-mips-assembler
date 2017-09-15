@@ -8,12 +8,9 @@ void parse_program(FILE *infp, FILE *outfp){
 
   	/* Read in the program. */
   int len = 25;
-  char [len];
+  char str[len];
   const char s[2] = " ,";
   char *token;
-  int rt,rs,immediate;
-
-  char rt[5]
 
   while( fgets(str, len, infp) != NULL ) {
     token = strtok(str, s);
@@ -23,20 +20,22 @@ void parse_program(FILE *infp, FILE *outfp){
     }else if(strcmp(token, "ADDI") == 0){
     	instruction_type_two(token);
     }else if(strcmp(token, "ADDU") == 0){
-    	insturction_type_one(token);
+    	instruction_type_one(token);
     }else if(strcmp(token, "ADDIU") == 0){
     	instruction_type_two(token);
     }else if(strcmp(token, "BEQ") == 0){
       instruction_type_three(token);
   	}else if(strcmp(token, "BNE") == 0){
       instruction_type_three(token);
+    }
+
     while(token != NULL){
       token = strtok(NULL, s);
     }
   }
 }
 
-void instruction_type_one(char *tok){
+void instruction_type_one(char *token){
   const char s[2] = " ,";
   int i;
   uint32_t rd, rs, rt;
@@ -61,7 +60,7 @@ void instruction_type_one(char *tok){
   }
 }
 
-void instruction_type_two(char *tok){
+void instruction_type_two(char *token){
   const char s[2] = " ,";
   int i;
   uint32_t rt, rs, immediate;
@@ -86,7 +85,7 @@ void instruction_type_two(char *tok){
   }
 }
 
-void instruction_type_three(char *tok){
+void instruction_type_three(char *token){
   const char s[2] = " ,";
   int i;
   uint32_t rs, rt, offset;
@@ -101,7 +100,7 @@ void instruction_type_three(char *tok){
         rt = findIn_regLookup(token);
         break;
       case 2: //offset
-        offsest = token;
+        offset = token;
         break;
       default:
         printf("Error\n");
@@ -130,12 +129,16 @@ int main(int argc, char *argv[]){
   FILE *infp;
   infp = fopen(argv[2], "r");
   if(!infp){
-    printf("Can't open program file\n");
+    printf("Can't open input file\n");
     exit(2);
   }
 
   FILE *outfp;
-
+  outfp = fopen(argv[3], "w");
+  if(!outfp){
+    printf("Cant open output file\n");
+    exit(3);
+  }
 
   parse_program(infp, outfp);
 

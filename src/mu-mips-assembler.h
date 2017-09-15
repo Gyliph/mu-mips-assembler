@@ -7,7 +7,7 @@ char REG_LOOKUP[32][10] = {
   "$t8", "$t9", "$k0", "$k1", "$gp", "$sp", "$fp", "$ra"
 };
 
-void parse_program(FILE*);
+void parse_program(FILE*, FILE*);
 void instruction_type_one(char*);
 void instruction_type_two(char*);
 void instruction_type_three(char*);
