@@ -1,4 +1,5 @@
 #include <stdint.h>
+#define NUM_INSTRUCTIONS 32
 
 char REG_LOOKUP[32][10] = {
   "$zero", "$at", "$v0", "$v1", "$a0", "$a1", "$a2", "$a3",
@@ -8,7 +9,7 @@ char REG_LOOKUP[32][10] = {
 };
 
 void parse_program(FILE*, FILE*);
-void instruction_type_one(char*);
-void instruction_type_two(char*);
-void instruction_type_three(char*);
+void instruction_type_special(char*, uint32_t);
+void instruction_type_normal(char*, uint32_t);
+void instruction_type_branch(char*, uint32_t);
 uint32_t findIn_regLookup(char*);
