@@ -10,45 +10,44 @@ void parse_program(FILE *infp, FILE *outfp){
   	/* Read in the program. */
   int len = 25;
   char str[len];
-  const char s[3] = ", ";
+  char line[len];
+  const char s[4] = ", \n";
   char *token;
   uint32_t instruction;
 
   while( fgets(str, len, infp) != NULL ) {
     instruction = 0x00000000;
-    printf("\nparsing\n");
-
     token = strtok(str, s);
-    printf("token: %s\n", token);
 
     if(strcmp(token, "add") == 0){
       instruction |= 0x00000020;
-    	instruction_type_special(token, instruction);
+    	instruction = instruction_type_special(token, instruction);
     }else if(strcmp(token, "addi") == 0){
       instruction |= 0x20000000;
-    	instruction_type_normal(token, instruction);
+    	instruction = instruction_type_normal(token, instruction);
     }else if(strcmp(token, "addu") == 0){
       instruction |= 0x00000021;
-    	instruction_type_special(token, instruction);
+    	instruction = instruction_type_special(token, instruction);
     }else if(strcmp(token, "addiu") == 0){
       instruction |= 0x24000000;
-    	instruction_type_normal(token, instruction);
+    	instruction = instruction_type_normal(token, instruction);
     }else if(strcmp(token, "beq") == 0){
       instruction |= 0x10000000;
-      instruction_type_branch(token, instruction);
+      instruction = instruction_type_branch(token, instruction);
   	}else if(strcmp(token, "bne") == 0){
       instruction |= 0x14000000;
-      instruction_type_branch(token, instruction);
+      instruction = instruction_type_branch(token, instruction);
+    }else if(strcmp(token, "syscall") == 0){
+      instruction |= 0x0000000C;
     }
 
-    while(token != NULL){
-      token = strtok(NULL, s);
-    }
+    sprintf(line, "%08x\n", instruction);
+    fputs(line, outfp);
   }
 }
 
-void instruction_type_special(char *token, uint32_t instruction){
-  const char s[3] = " ,";
+uint32_t instruction_type_special(char *token, uint32_t instruction){
+  const char s[4] = " ,\n";
   int i;
   uint32_t rs = 0x0;
   uint32_t rt = 0x0;
@@ -77,11 +76,11 @@ void instruction_type_special(char *token, uint32_t instruction){
   instruction |= rs;
   instruction |= rt;
 
-  printf("%08x\n", instruction);
+  return instruction;
 }
 
-void instruction_type_normal(char *token, uint32_t instruction){
-  const char s[3] = " ,";
+uint32_t instruction_type_normal(char *token, uint32_t instruction){
+  const char s[4] = " ,\n";
   int i;
   uint32_t rs = 0x0;
   uint32_t rt = 0x0;
@@ -98,6 +97,7 @@ void instruction_type_normal(char *token, uint32_t instruction){
         break;
       case 2: //immediate
         immediate = strtol(token, NULL, 16);
+        immediate &= 0x0000FFFF;
         break;
       default:
         printf("Error\n");
@@ -110,11 +110,11 @@ void instruction_type_normal(char *token, uint32_t instruction){
   instruction |= rs;
   instruction |= immediate;
 
-  printf("%08x\n", instruction);
+  return instruction;
 }
 
-void instruction_type_branch(char *token, uint32_t instruction){
-  const char s[3] = " ,";
+uint32_t instruction_type_branch(char *token, uint32_t instruction){
+  const char s[4] = " ,\n";
   int i;
   uint32_t rs = 0x0;
   uint32_t rt = 0x0;
@@ -131,7 +131,7 @@ void instruction_type_branch(char *token, uint32_t instruction){
         break;
       case 2: //offset
         offset = strtol(token, NULL, 16);
-        printf("offset: %08x\n", offset);
+        offset &= 0x0000FFFF;
         break;
       default:
         printf("Error\n");
@@ -144,7 +144,7 @@ void instruction_type_branch(char *token, uint32_t instruction){
   instruction |= rt;
   instruction |= offset;
 
-  printf("%08x\n", instruction);
+  return instruction;
 }
 
 uint32_t findIn_regLookup(char *s){

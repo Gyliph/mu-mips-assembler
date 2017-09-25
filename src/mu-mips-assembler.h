@@ -9,7 +9,7 @@ char REG_LOOKUP[32][10] = {
 };
 
 void parse_program(FILE*, FILE*);
-void instruction_type_special(char*, uint32_t);
-void instruction_type_normal(char*, uint32_t);
-void instruction_type_branch(char*, uint32_t);
+uint32_t instruction_type_special(char*, uint32_t);
+uint32_t instruction_type_normal(char*, uint32_t);
+uint32_t instruction_type_branch(char*, uint32_t);
 uint32_t findIn_regLookup(char*);
