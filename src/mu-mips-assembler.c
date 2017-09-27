@@ -11,7 +11,7 @@ void parse_program(FILE *infp, FILE *outfp){
   int len = 25;
   char str[len];
   char line[len];
-  const char s[6] = ", ()\n";
+  const char s[7] = ", ()\n\t";
   char *token;
   uint32_t instruction;
 
@@ -72,7 +72,7 @@ void parse_program(FILE *infp, FILE *outfp){
 }
 
 uint32_t instruction_type_special(char *token, uint32_t instruction){
-  const char s[6] = ", ()\n";
+  const char s[7] = ", ()\n\t";
   int i;
   uint32_t rs = 0x0;
   uint32_t rt = 0x0;
@@ -105,7 +105,7 @@ uint32_t instruction_type_special(char *token, uint32_t instruction){
 }
 
 uint32_t instruction_type_shift(char *token, uint32_t instruction){
-  const char s[6] = ", ()\n";
+  const char s[7] = ", ()\n\t";
   int i;
   uint32_t rt = 0x0;
   uint32_t rd = 0x0;
@@ -139,7 +139,7 @@ uint32_t instruction_type_shift(char *token, uint32_t instruction){
 }
 
 uint32_t instruction_type_store_load(char *token, uint32_t instruction){
-  const char s[6] = ", ()\n";
+  const char s[7] = ", ()\n\t";
   int i;
   uint32_t rt = 0x0;
   uint32_t offset = 0x0;
@@ -173,7 +173,7 @@ uint32_t instruction_type_store_load(char *token, uint32_t instruction){
 }
 
 uint32_t instruction_type_normal(char *token, uint32_t instruction){
-  const char s[6] = ", ()\n";
+  const char s[7] = ", ()\n\t";
   int i;
   uint32_t rs = 0x0;
   uint32_t rt = 0x0;
@@ -207,7 +207,7 @@ uint32_t instruction_type_normal(char *token, uint32_t instruction){
 }
 
 uint32_t instruction_type_branch(char *token, uint32_t instruction){
-  const char s[6] = ", ()\n";
+  const char s[7] = ", ()\n\t";
   int i;
   uint32_t rs = 0x0;
   uint32_t rt = 0x0;
@@ -241,7 +241,7 @@ uint32_t instruction_type_branch(char *token, uint32_t instruction){
 }
 
 uint32_t instruction_type_branch_z(char *token, uint32_t instruction){
-  const char s[6] = ", ()\n";
+  const char s[7] = ", ()\n\t";
   int i;
   uint32_t rs = 0x0;
   uint32_t offset = 0x0;
