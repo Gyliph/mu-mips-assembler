@@ -1,0 +1,61 @@
+# Group 10
+# bubble sort
+
+# store A = {5,3,6,8,9,1,4,7,2,10} into memory
+addiu	$t0, $zero, 0x0005  # place int 5 into register $t0
+addiu	$t1, $zero, 0x1001  # place address 1001 into register $t1
+sll		$s0, $t1, 	0x10	# SLL rd, rt, sa - result, data, shift by bits; Shift left the contents of $t1 by 16 bits
+sw		$t0, 0x0($s0)		# SW rt, offset(base) - 16bit offset added to contents of Base, contents of rt stored at that address
+
+addiu	$t0, $zero, 0x0003
+sw    	$t0, 0x4($s0)
+addiu	$t0, $zero, 0x0006
+sw    	$t0, 0x8($s0)
+addiu	$t0, $zero, 0x0008
+sw    	$t0, 0xC($s0)
+addiu	$t0, $zero, 0x0009
+sw    	$t0, 0x10($s0)
+addiu	$t0, $zero, 0x0001
+sw    	$t0, 0x14($s0)
+addiu	$t0, $zero, 0x0004
+sw    	$t0, 0x18($s0)
+addiu	$t0, $zero, 0x0007
+sw    	$t0, 0x1C($s0)
+addiu	$t0, $zero, 0x0002
+sw    	$t0, 0x20($s0)
+addiu	$t0, $zero, 0x000A
+sw    	$t0, 0x24($s0)
+
+addiu 	$t1, $zero, 0 		# set i register to 0
+addiu 	$t2, $zero, 0 		# set j register to 0
+addiu 	$t3, $zero, 0xA  	# set n, the length of the array
+
+							# 1st while loop
+addiu 	$t4, $zero, 1 		# find n-1
+sub   	$t5, $t3, $t4 		# n-1 in $t5
+sub   	$t6, $t1, $t5 		# $t6 = i-n-1
+bgez  	$t6, 				# send to post while loop
+
+addiu 	$t2, $zero, 0 		# set j register to 0
+
+sub		$t7, $t5, $t4 		# set $t7 = n-1-i
+sub 	$t8, $t2, $t7 		# set $t8 = j-n-1-i
+bgez 	$t8, 9    			# send to i++
+
+							# if arry[j] > array[j+1] {swap (&arr[j], &arr[j+1])};
+lw  	$a0, ($s0)			# load arr[j] into register
+lw  	$a1, 0x4($s0)		# load arr[j+1] into register
+sub 	$a2, $a1, $a0		# arr[j+1] - arr[j]	
+bgez 	$a2, 4 				# skip the swap, send to next iteration
+
+sw  	$a0, 0x4($s0)		# swap the contents the memory address'
+sw  	$a1, 0x0($s0)
+
+addiu 	$t2, $t2, 1 		# j++
+addiu 	$s0, $s0, 0x4 		# increment memory address
+addiu 	$t1, $t1, 1 		# i++
+
+bne   	$zero, $t4, -15 	# go back to the first while loop
+
+addiu 	$v0, $zero, 0xA 	# store exit condition in v0
+syscall

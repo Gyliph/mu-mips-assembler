@@ -1,0 +1,9 @@
+addiu $t0, $zero, 0x0005
+addiu $t1, $zero, 0x1001
+sll $s0, $t1, 0x10
+sw $t0, 0x0($s0)
+
+addiu $t0, $zero, 0x0003
+sw $t0, 0x4($s0)
+addiu $t0, $zero, 0x0003
+sw $t0, 0x4($s0)
