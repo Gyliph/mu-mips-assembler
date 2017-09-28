@@ -15,4 +15,6 @@ uint32_t instruction_type_branch(char*, uint32_t);
 uint32_t instruction_type_branch_z(char*, uint32_t);
 uint32_t instruction_type_shift(char*, uint32_t);
 uint32_t instruction_type_store_load(char*, uint32_t);
+uint32_t instruction_type_mult(char*, uint32_t);
+uint32_t instruction_type_mf(char*, uint32_t);
 uint32_t findIn_regLookup(char*);

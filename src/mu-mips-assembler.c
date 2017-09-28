@@ -19,8 +19,6 @@ void parse_program(FILE *infp, FILE *outfp){
     instruction = 0x00000000;
     token = strtok(str, s);
 
-    printf("op: %s\n", token);
-
     if(token != NULL && token[0] != '#'){
       if(strcmp(token, "add") == 0){
         instruction |= 0x00000020;
@@ -58,6 +56,12 @@ void parse_program(FILE *infp, FILE *outfp){
       }else if(strcmp(token, "lw") == 0){
         instruction |= 0x8C000000;
         instruction = instruction_type_store_load(token, instruction);
+      }else if(strcmp(token, "mult") == 0){
+        instruction |= 0x00000018;
+        instruction = instruction_type_mult(token, instruction);
+      }else if(strcmp(token, "mflo") == 0){
+        instruction |= 0x00000012;
+        instruction = instruction_type_mf(token, instruction);
       }else if(strcmp(token, "syscall") == 0){
         instruction |= 0x0000000C;
       }
@@ -104,6 +108,45 @@ uint32_t instruction_type_special(char *token, uint32_t instruction){
   return instruction;
 }
 
+uint32_t instruction_type_mult(char *token, uint32_t instruction){
+  const char s[7] = ", ()\n\t";
+  int i;
+  uint32_t rs = 0x0;
+  uint32_t rt = 0x0;
+
+  for(i=0; i<2; i++){
+    token = strtok(NULL, s);
+    switch(i){
+      case 0: //rd
+        rs = (findIn_regLookup(token) << 21);
+        break;
+      case 1: //rs
+        rt = (findIn_regLookup(token) << 16);
+        break;
+      default:
+        printf("Error\n");
+        exit(3);
+        break;
+    }
+  }
+
+  instruction |= rs;
+  instruction |= rt;
+
+  return instruction;
+}
+
+uint32_t instruction_type_mf(char *token, uint32_t instruction){
+  const char s[7] = ", ()\n\t";
+  uint32_t rd = 0x0;
+
+  token = strtok(NULL, s);
+  rd = (findIn_regLookup(token) << 11);
+  instruction |= rd;
+
+  return instruction;
+}
+
 uint32_t instruction_type_shift(char *token, uint32_t instruction){
   const char s[7] = ", ()\n\t";
   int i;
@@ -122,7 +165,8 @@ uint32_t instruction_type_shift(char *token, uint32_t instruction){
         break;
       case 2: //rt
         sa = strtol(token, NULL, 16);
-        sa &= 0x000001C0;
+        sa = sa << 6;
+        sa &= 0x000007C0;
         break;
       default:
         printf("Error\n");

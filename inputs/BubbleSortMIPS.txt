@@ -4,7 +4,7 @@
 # store A = {5,3,6,8,9,1,4,7,2,10} into memory
 addiu	$t0, $zero, 0x0005  # place int 5 into register $t0
 addiu	$t1, $zero, 0x1001  # place address 1001 into register $t1
-sll		$s0, $t1, 	0x10	# SLL rd, rt, sa - result, data, shift by bits; Shift left the contents of $t1 by 16 bits
+sll		$s0, $t1, 0x10	# SLL rd, rt, sa - result, data, shift by bits; Shift left the contents of $t1 by 16 bits
 sw		$t0, 0x0($s0)		# SW rt, offset(base) - 16bit offset added to contents of Base, contents of rt stored at that address
 
 addiu	$t0, $zero, 0x0003
@@ -45,7 +45,7 @@ bgez 	$t8, 9    			# send to i++
 							# if arry[j] > array[j+1] {swap (&arr[j], &arr[j+1])};
 lw  	$a0, ($s0)			# load arr[j] into register
 lw  	$a1, 0x4($s0)		# load arr[j+1] into register
-sub 	$a2, $a1, $a0		# arr[j+1] - arr[j]	
+sub 	$a2, $a1, $a0		# arr[j+1] - arr[j]
 bgez 	$a2, 4 				# skip the swap, send to next iteration
 
 sw  	$a0, 0x4($s0)		# swap the contents the memory address'
